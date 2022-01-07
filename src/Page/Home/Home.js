@@ -48,7 +48,7 @@ function Home({stories, readStory}){
       />
 
             {/* Blog List & Empty View */}
-            {blogs.length===0 ? <List /> : <BlogList blogs={blog} />}
+            {blogs.length ? <List /> : <BlogList blogs={blog} />}
             {/* { <BlogList blogs={blog} />} */}
   </div>);
 };
