@@ -1,0 +1,15 @@
+.Tab{
+   display: inline-block;
+   flex-direction: row;
+}
+.Tab_btn{
+   display: flex;
+   margin-right: 20px;
+   border: none;
+   border-radius: 5px;
+}
+ 
+ .Tab_btn {
+   background: black;
+   color: white;
+ }
