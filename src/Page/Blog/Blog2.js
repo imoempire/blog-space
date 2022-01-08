@@ -7,29 +7,39 @@ import './styles.css'
 import image from '../../Images/space2.png'
 import Avatar from '../../Images/avatar.png'
 
+import client from '../../contentfull'
 
 class Blog2 extends Component {
    constructor(props){
-      console.log(props);
-      // console.log(props.stories.image);
+      console.log(props.location.state.story);
       super(props);
       this.state =  {
-                  title: props.stories.title,
-                  category: props.stories.category,
-                  subCategory: props.stories.subCategory,
-                  description: props.stories.description,
-                  authorName: props.stories.authorName,
-                  authorAvatar: props.stories.authorAvatar,
-                  createdAt: props.stories.createdAt,
-                  cover: props.stories.cover,
-                  slug: props.stories.slug,
+                  title: props.location.state.title.title,
+                  category: props.location.state.category.category,
+                  subCategory: props.location.state.subCategory.subCategory,
+                  description: props.location.state.description.description,
+                  authorName: props.location.state.authorName.authorName,
+                  authorAvatar: props.location.state.authorAvatar.authorAvatar,
+                  createdAt: props.location.state.createdAt.createdAt,
+                  cover: props.location.state.cover.cover,
+   
               };
     this.id = props.match.params.id;
    };
 
-   componentDidMount(){
-    //  readStory();
-   }
+   componentDidMount() {
+      client
+        .getEntries({
+          content_type: "spaceStories",
+        })
+        .then((response) => {
+          console.log(response);
+          this.props({
+            blogs: response.items,
+          });
+        })
+        .catch(console.error);
+    }
 
    handleGoBack = () => {
       this.props.history.push("/");
@@ -54,7 +64,7 @@ class Blog2 extends Component {
             <p className='chip'>{this.state.subCategory}</p>
             </div>
           </header>
-          <img className='image-cover' src={image} alt='cover' />
+          <img className='image-cover' src={this.state.cover.fields.file.url} alt='cover' />
           <p className='blog-desc'>{this.state.description}</p>
         </div>
     </div>
@@ -62,14 +72,16 @@ class Blog2 extends Component {
    }
 }
 
-const  mapStateToProps = (state, ownProps) =>({
-   stories: state.story.stories.find(
-      (stories) => stories.id === ownProps.match.params.id,
-   ),
-});
+// const  mapStateToProps = (state, ownProps) =>({
+//    stories: state.story.stories.find(
+//       (stories) => stories.id === ownProps.match.params.id,
+//    ),
+// });
 
-const mapDispatchToProps={
-  readStory: readStory
-}
+// const mapDispatchToProps={
+//   readStory: readStory
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Blog2);
+// export default connect(mapStateToProps, mapDispatchToProps)(Blog2);
+
+export default Blog2;

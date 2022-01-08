@@ -4,15 +4,24 @@ import List from "../../Components/Common/Empty/List";
 import BlogList from "../../Components/Home/BlogList/BlogList";
 import Header from "../../Components/Home/Header/Header";
 import SearchBar from "../../Components/Home/Search/SearchBar";
-import { readStory } from "../../FirebaseState/Reducer/Actions";
+import {  readStory } from "../../FirebaseState/Reducer/Actions";
+import client from '../../contentfull'
 
-
-function Home({stories, readStory}){
-  console.log(stories);
-  const blog = stories;
-  console.log(blog);
-  const [blogs, setBlogs] = useState(blog);
+function Home(){
+  // const blog = stories;
+  const [blogs, setBlogs] = useState([]);
   const [searchKey, setSearchKey] = useState("");
+
+
+  const getData = async()=>{
+    client.getEntries({
+      content_type: 'spaceStories',
+    })
+    .then((response)=>{
+      setBlogs(response.items)
+    })
+    .catch(console.error)
+  }
 
   const handleSearchBar = (e) => {
    e.preventDefault();
@@ -20,7 +29,7 @@ function Home({stories, readStory}){
  };
 
   const handleSearchResults = () => {
-   const allBlogs = blog;
+   const allBlogs = blogs;
    const filteredBlogs = allBlogs.filter((blog) =>
      blog.category.toLowerCase().includes(searchKey.toLowerCase().trim())
    );
@@ -28,17 +37,20 @@ function Home({stories, readStory}){
  };
 
  const handleClearSearch = () => {
-   setBlogs(blog);
+   setBlogs(blogs);
    setSearchKey('');
  };
 
+
+
   useEffect(() => {
-    readStory()
+    getData();
   }, [])
 
   return( 
   <div>
      <Header/>
+     
 
       <SearchBar 
          value={searchKey}
@@ -48,8 +60,8 @@ function Home({stories, readStory}){
       />
 
             {/* Blog List & Empty View */}
-            {blogs.length ? <List /> : <BlogList blogs={blog} />}
-            {/* { <BlogList blogs={blog} />} */}
+            {blogs.length===0 ? <List /> : <BlogList blogs={blogs} />}
+            {/* { <BlogList blogs={blogs} />} */}
   </div>);
 };
 

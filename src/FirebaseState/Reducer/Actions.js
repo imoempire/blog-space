@@ -1,4 +1,6 @@
- const ADD_STORY = "ADD_STORY";
+import client from '../../contentfull'
+
+const ADD_STORY = "ADD_STORY";
  const REMOVE_STORY = "REMOVE_STORY";
  const READ_STORY = "READ_STORY";
 
@@ -45,4 +47,16 @@ export const readStory = ()=>{
               })
           })
   }
+}
+
+export const getData = async()=>{
+    try{
+        let response = await client.getEntries(
+            { content_type: "spaceStories" }
+        );
+        let stories = response
+        console.log(stories);
+    }catch(error){
+        console.log(error);
+    }
 }
